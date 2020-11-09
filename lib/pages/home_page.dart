@@ -1,4 +1,5 @@
 import 'package:F_202030_Firebase/backend/firebase_auth.dart';
+import 'package:F_202030_Firebase/models/record.dart';
 import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,20 +8,7 @@ import 'package:provider/provider.dart';
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () {
-                signOutFirebase();
-                Provider.of<AuthProvider>(context, listen: false).setLogged();
-              }),
-        ],
-      ),
-      body: _buildBody(context),
-    );
+    return _buildBody(context);
   }
 
   Widget _buildBody(BuildContext context) {
@@ -60,22 +48,4 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
-}
-
-class Record {
-  final String name;
-  final int votes;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['votes'] != null),
-        name = map['name'],
-        votes = map['votes'];
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$votes>";
 }

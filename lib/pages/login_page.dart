@@ -1,5 +1,5 @@
 import 'package:F_202030_Firebase/backend/firebase_auth.dart';
-import 'package:F_202030_Firebase/pages/signup.dart';
+import 'package:F_202030_Firebase/pages/signup_page.dart';
 import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,7 @@ class LoginView extends StatelessWidget {
               Consumer<AuthProvider>(builder: (context, model, child) {
                 return FlatButton(
                   onPressed: () {
-                    _login(context, "a@a.com", "123456", model);
+                    _login(context, "a@a.com", "1234567", model);
                   },
                   child: Text('Login'),
                 );
@@ -48,8 +48,9 @@ class LoginView extends StatelessWidget {
       BuildContext context, String email, String password, AuthProvider model) {
     signInWithFirebase(email, password).then((user) {
       print(user);
-      _buildDialog(context, "Login", "Login OK");
-      model.setLogged();
+      _buildDialog(context, "Login", "Login OK " + user);
+      //model.setLogged();
+      model.setLoggedIn(user);
     }).catchError((error) {
       _buildDialog(context, "Login", error.toString());
     });

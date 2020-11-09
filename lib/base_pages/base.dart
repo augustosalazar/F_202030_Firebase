@@ -1,10 +1,11 @@
+import 'package:F_202030_Firebase/base_pages/botton_nav.dart';
+import 'package:F_202030_Firebase/pages/login_page.dart';
 import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:F_202030_Firebase/providers/businessLogicProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'home.dart';
-import 'login.dart';
+import '../pages/home_page.dart';
 
 class BaseApp extends StatelessWidget {
   @override
@@ -17,7 +18,7 @@ class BaseApp extends StatelessWidget {
             home: Consumer<AuthProvider>(
               builder: (context, model, child) {
                 if (model.getLogged) {
-                  return BaseHomeApp();
+                  return BottonNavigator();
                 } else {
                   return LoginView();
                 }

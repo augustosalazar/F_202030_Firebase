@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool _logged = false;
+  String _uid = "";
 
   AuthProvider() {
     _readSharedPreferences();
@@ -10,8 +11,17 @@ class AuthProvider extends ChangeNotifier {
 
   get getLogged => _logged;
 
+  get _getUID => _uid;
+
   void setLogged() {
     _logged = _logged == false ? true : false;
+    _saveSharedPreferences();
+    notifyListeners();
+  }
+
+  void setLoggedIn(String uid) {
+    _logged = true;
+    _uid = uid;
     _saveSharedPreferences();
     notifyListeners();
   }
