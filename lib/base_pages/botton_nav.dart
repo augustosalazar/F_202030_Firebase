@@ -1,4 +1,5 @@
 import 'package:F_202030_Firebase/backend/firebase_auth.dart';
+import 'package:F_202030_Firebase/pages/chat_page.dart';
 import 'package:F_202030_Firebase/pages/home_page.dart';
 import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,7 @@ class _BottonNavigatorState extends State<BottonNavigator> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     HomeView(),
-    Text(
-      'Index 1: Chat',
-      style: optionStyle,
-    ),
+    ChatPage(),
   ];
 
   void _onItemTapped(int index) {
