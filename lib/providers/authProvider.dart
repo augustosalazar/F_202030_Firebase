@@ -11,7 +11,9 @@ class AuthProvider extends ChangeNotifier {
 
   get getLogged => _logged;
 
-  get _getUID => _uid;
+  String getUID() {
+    return _uid;
+  }
 
   void setLogged() {
     _logged = _logged == false ? true : false;
@@ -22,6 +24,7 @@ class AuthProvider extends ChangeNotifier {
   void setLoggedIn(String uid) {
     _logged = true;
     _uid = uid;
+    print("setLoggedIn" + uid);
     _saveSharedPreferences();
     notifyListeners();
   }

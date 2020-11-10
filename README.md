@@ -3,3 +3,4 @@
 Simple implementation for:   
 - Authentication   
 - Firestore
+- Real time database (chat)

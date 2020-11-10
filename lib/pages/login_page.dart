@@ -27,7 +27,15 @@ class LoginView extends StatelessWidget {
                   onPressed: () {
                     _login(context, "a@a.com", "1234567", model);
                   },
-                  child: Text('Login'),
+                  child: Text('Login a@a.com'),
+                );
+              }),
+              Consumer<AuthProvider>(builder: (context, model, child) {
+                return FlatButton(
+                  onPressed: () {
+                    _login(context, "b@b.com", "1234567", model);
+                  },
+                  child: Text('Login b@b.com'),
                 );
               }),
               Consumer<AuthProvider>(builder: (context, model, child) {
