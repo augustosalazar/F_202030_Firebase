@@ -13,14 +13,16 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   List<Message> messages = List();
+  ScrollController _scrollController = new ScrollController();
   String _uid;
   void _sendMsg() {
-    sendChatMsg("My Text");
+    sendChatMsg("My Text " + messages.length.toString());
   }
 
   @override
   void initState() {
     super.initState();
+
     print("initState");
     //_uid = Provider.of<AuthProvider>(context, listen: false).getUID();
     //print("initState for user " + _uid);
@@ -40,6 +42,8 @@ class _ChatPageState extends State<ChatPage> {
     setState(() {
       messages.add(Message.fromSnapshot(event.snapshot));
     });
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   _onEntryChanged(Event event) {
@@ -49,6 +53,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _list() {
     String myUID = Provider.of<AuthProvider>(context, listen: false).getUID();
     return ListView.builder(
+      controller: _scrollController,
       itemCount: messages.length,
       itemBuilder: (context, posicion) {
         var element = messages[posicion];
