@@ -62,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _list() {
     String myUID = Provider.of<AuthProvider>(context, listen: false).getUID();
-    Widget l = ListView.builder(
+    return ListView.builder(
       controller: _scrollController,
       itemCount: messages.length,
       itemBuilder: (context, posicion) {
@@ -70,31 +70,63 @@ class _ChatPageState extends State<ChatPage> {
         return _item(element, posicion, myUID);
       },
     );
-    return l;
   }
 
   Widget _item(Message element, int posicion, String myUID) {
     return Card(
         margin: EdgeInsets.all(4.0),
-        color: myUID == element.user ? Colors.yellow[200] : Colors.green[200],
+        color: myUID == element.user ? Colors.yellow[200] : Colors.grey[300],
         child: ListTile(
           contentPadding: EdgeInsets.all(10.0),
-          title: _itemTitle(element),
+          title: _itemTitle(element, myUID == element.user),
         ));
   }
 
-  Widget _itemTitle(Message item) {
+  Widget _itemTitle(Message item, bool own) {
     return Text(item.text,
+        textAlign: own ? TextAlign.right : TextAlign.left,
         style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold));
+  }
+
+  Widget _body() {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.all(2.0),
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [Expanded(flex: 4, child: _list()), _textInput()],
+        ),
+      ),
+    );
+  }
+
+  Widget _textInput() {
+    return Row(
+      children: [
+        Expanded(
+            flex: 3,
+            child: Container(
+              margin: const EdgeInsets.only(left: 5.0, top: 5.0),
+              child: TextField(
+                  decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Some text here',
+              )),
+            )),
+        FlatButton(
+          onPressed: _sendMsg,
+          child: Text("Send"),
+        )
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
     Widget s = Scaffold(
-      body: _list(),
-      floatingActionButton: new FloatingActionButton(
-          onPressed: _sendMsg, tooltip: 'Add task', child: new Icon(Icons.add)),
+      body: _body(),
     );
     return s;
   }
