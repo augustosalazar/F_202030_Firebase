@@ -1,10 +1,8 @@
 import 'package:F_202030_Firebase/backend/firebase_real_time.dart';
 import 'package:F_202030_Firebase/models/message.dart';
 import 'package:F_202030_Firebase/providers/authProvider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -15,7 +13,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   List<Message> messages = List();
   ScrollController _scrollController;
-  String _uid;
+  bool _needsScroll = false;
   void _sendMsg() {
     sendChatMsg("My Text " + messages.length.toString());
   }
@@ -46,13 +44,20 @@ class _ChatPageState extends State<ChatPage> {
     print("Somethig was added");
     setState(() {
       messages.add(Message.fromSnapshot(event.snapshot));
+      _needsScroll = true;
     });
-    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
   _onEntryChanged(Event event) {
     print("Somethig changed");
+  }
+
+  _scrollToEnd() async {
+    if (_needsScroll) {
+      _needsScroll = false;
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+    }
   }
 
   Widget _list() {
@@ -85,7 +90,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building!!!");
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
     Widget s = Scaffold(
       body: _list(),
       floatingActionButton: new FloatingActionButton(
