@@ -4,6 +4,7 @@ import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -14,8 +15,24 @@ class _ChatPageState extends State<ChatPage> {
   List<Message> messages = List();
   ScrollController _scrollController;
   bool _needsScroll = false;
+
+  static const List<String> _possibleMessages = [
+    "Hi!",
+    "Hello.",
+    "Bye forever!",
+    "I'd really like to talk to you.",
+    "Have you heard the news?",
+    "I see you're using our website. Can I annoy you with a chat bubble?",
+    "I miss you.",
+    "I never want to hear from you again.",
+    "You up?",
+    ":-)",
+    "ok",
+  ];
+  final Random _random = Random();
+
   void _sendMsg() {
-    sendChatMsg("My Text " + messages.length.toString());
+    sendChatMsg(_possibleMessages[_random.nextInt(_possibleMessages.length)]);
   }
 
   _scrollListener() {
@@ -29,7 +46,6 @@ class _ChatPageState extends State<ChatPage> {
     _scrollController.addListener(_scrollListener);
     print("initState");
 
-    final FirebaseDatabase database = FirebaseDatabase.instance;
     databaseReference
         .child("fluttermessages")
         .onChildChanged
