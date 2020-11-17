@@ -4,7 +4,12 @@ import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +21,7 @@ class LoginView extends StatelessWidget {
             children: [
               Consumer<AuthProvider>(builder: (context, model, child) {
                 return FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
                     signOutFirebase();
                   },
                   child: Text('Logout'),
@@ -25,6 +30,7 @@ class LoginView extends StatelessWidget {
               Consumer<AuthProvider>(builder: (context, model, child) {
                 return FlatButton(
                   onPressed: () {
+                    // setLoading(true);
                     _login(context, "a@a.com", "1234567", model);
                   },
                   child: Text('Login a@a.com'),
@@ -33,6 +39,7 @@ class LoginView extends StatelessWidget {
               Consumer<AuthProvider>(builder: (context, model, child) {
                 return FlatButton(
                   onPressed: () {
+                    // setLoading(true);
                     _login(context, "b@b.com", "1234567", model);
                   },
                   child: Text('Login b@b.com'),
@@ -50,13 +57,15 @@ class LoginView extends StatelessWidget {
             ],
           ),
         ));
+
+    ;
   }
 
   _login(
       BuildContext context, String email, String password, AuthProvider model) {
     signInWithFirebase(email, password).then((user) {
       print(user);
-      _buildDialog(context, "Login", "Login OK " + user);
+      _buildDialog(context, "Login", "Login OK ");
       //model.setLogged();
       model.setLoggedIn(user);
     }).catchError((error) {

@@ -4,6 +4,7 @@ import 'package:F_202030_Firebase/providers/authProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -13,19 +14,23 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   List<Message> messages = List();
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController;
   String _uid;
   void _sendMsg() {
     sendChatMsg("My Text " + messages.length.toString());
   }
 
+  _scrollListener() {
+    print("_scrollListener");
+  }
+
   @override
   void initState() {
     super.initState();
-
+    _scrollController = new ScrollController();
+    _scrollController.addListener(_scrollListener);
     print("initState");
-    //_uid = Provider.of<AuthProvider>(context, listen: false).getUID();
-    //print("initState for user " + _uid);
+
     final FirebaseDatabase database = FirebaseDatabase.instance;
     databaseReference
         .child("fluttermessages")
@@ -52,7 +57,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _list() {
     String myUID = Provider.of<AuthProvider>(context, listen: false).getUID();
-    return ListView.builder(
+    Widget l = ListView.builder(
       controller: _scrollController,
       itemCount: messages.length,
       itemBuilder: (context, posicion) {
@@ -60,6 +65,7 @@ class _ChatPageState extends State<ChatPage> {
         return _item(element, posicion, myUID);
       },
     );
+    return l;
   }
 
   Widget _item(Message element, int posicion, String myUID) {
@@ -79,10 +85,12 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    print("Building!!!");
+    Widget s = Scaffold(
       body: _list(),
       floatingActionButton: new FloatingActionButton(
           onPressed: _sendMsg, tooltip: 'Add task', child: new Icon(Icons.add)),
     );
+    return s;
   }
 }

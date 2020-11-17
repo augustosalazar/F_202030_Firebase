@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _logged = false;
   String _uid = "";
 
@@ -11,8 +13,19 @@ class AuthProvider extends ChangeNotifier {
 
   get getLogged => _logged;
 
+  // wrapping the firebase calls
+  Future logout() async {
+    var result = FirebaseAuth.instance.signOut();
+    notifyListeners();
+    return result;
+  }
+
   String getUID() {
     return _uid;
+  }
+
+  Future<FirebaseUser> getUser() {
+    return _auth.currentUser();
   }
 
   void setLogged() {
